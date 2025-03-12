@@ -74,7 +74,7 @@
   .header {
     background-color: var(--header-bg);
     color: var(--header-text);
-    padding: 5px 16px; /* Adjust padding to move elements up or down */
+    padding: 0px 16px; /* Adjust padding to move elements up or down */
     position: fixed;
     top: 0;
     left: 0;
@@ -170,10 +170,10 @@
   /* File input container */
   .file-input-container {
     background-color: var(--file-input-bg);
-    padding: 12px;
+    padding: 10px;
     text-align: center;
     position: fixed;
-    top: 70px;
+    top: 60px;
     left: 0;
     right: 0;
     z-index: 1;
