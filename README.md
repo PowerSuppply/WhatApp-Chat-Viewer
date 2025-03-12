@@ -30,7 +30,7 @@ Many WhatsApp chat viewers are outdated, slow, or broken. This tool is designed 
 
 ## Live Demo
 
-Try it now: [Live Demo](https://PowerSuppply.github.io/WhatSapp-Chat-Viewer)
+Try it now: [Live Demo](https://PowerSuppply.github.io/WhatsApp-Chat-Viewer)
 
 ## Contributing
 
