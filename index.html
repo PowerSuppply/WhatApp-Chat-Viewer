@@ -11,13 +11,18 @@
   <!-- Header -->
   <header class="header">
     <h1>WhatsApp Chat Viewer</h1>
-    <div class="theme-toggle-container">
-      <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
-      <label for="theme-toggle" class="theme-toggle-label">
-        <span class="theme-toggle-slider"></span>
-        <span class="theme-toggle-emoji sun">☀️</span> <!-- Sun emoji -->
-        <span class="theme-toggle-emoji moon">🌙</span> <!-- Moon emoji -->
-      </label>
+    <div class="header-controls">
+      <div class="theme-toggle-container">
+        <button id="swap-toggle" class="swap-button" aria-label="Swap message sides">
+          🔄 Switch Chat
+        </button>
+        <input type="checkbox" id="theme-toggle" aria-label="Toggle theme">
+        <label for="theme-toggle" class="theme-toggle-label">
+          <span class="theme-toggle-slider"></span>
+          <span class="theme-toggle-emoji sun">☀️</span>
+          <span class="theme-toggle-emoji moon">🌙</span>
+        </label>
+      </div>
     </div>
   </header>
 
@@ -31,7 +36,7 @@
 
   <!-- Chat Display Section -->
   <main id="chat-container" aria-live="polite"></main>
-
+  <div id="loading" class="loading-spinner" aria-live="polite"></div>
   <!-- Script -->
   <script src="script.js"></script>
 </body>

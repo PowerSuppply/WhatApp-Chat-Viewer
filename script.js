@@ -1,3 +1,8 @@
+// Global variables
+let currentFileContent = null;
+let isSwapped = false;
+
+// File input handler
 document.getElementById('file-input').addEventListener('change', function (event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -5,87 +10,101 @@ document.getElementById('file-input').addEventListener('change', function (event
   const reader = new FileReader();
 
   reader.onload = function (e) {
-    const content = e.target.result;
-    if (content) {
-      displayChat(content);
-    } else {
-      alert("The file is empty or could not be read.");
-    }
+    currentFileContent = e.target.result;
+    processFile();
   };
 
   reader.onerror = () => alert("Error reading file!");
   reader.readAsText(file);
 });
 
-/**
- * Handles the display of WhatsApp chat messages from a text file
- * @param {string} text - The content of the chat file
- */
+// Swap toggle handler
+document.getElementById('swap-toggle').addEventListener('click', () => {
+  if (!currentFileContent) return alert("Please upload a file first");
+  isSwapped = !isSwapped;
+  processFile();
+});
+
+// Central processing function
+function processFile() {
+  if (currentFileContent) {
+    displayChat(currentFileContent);
+  }
+}
+
+// Chat display function
 function displayChat(text) {
   const chatContainer = document.getElementById('chat-container');
-  chatContainer.innerHTML = ''; // Clear the container
-
-  const fragment = document.createDocumentFragment(); // Use a DocumentFragment for batch appending
+  chatContainer.innerHTML = '';
+  const fragment = document.createDocumentFragment();
   const lines = text.split('\n');
+  let firstSender = null;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    if (!line) continue; // Skip empty lines
+    if (!line) continue;
 
     const cleanLine = line.replace(/[\u200e\u200f]/g, '');
 
     if (line.includes('end-to-end encrypted') || line.includes('Messages and calls are end-to-end encrypted')) {
-      const systemMessage = createSystemMessage("Messages are end-to-end encrypted. No one outside of this page, not even WhatsApp, can read or listen to them.");
+      const systemMessage = createSystemMessage("🔒 Messages are end-to-end encrypted. No one outside of this page, not even WhatsApp, can read or listen to them.");
       fragment.appendChild(systemMessage);
     } else {
       const standardMatch = cleanLine.match(/\[(.*?)\]\s+(.*?):\s*(.*)/);
       if (standardMatch) {
         const [_, datetime, sender, message] = standardMatch;
-        const messageBubble = createMessageBubble(sender, datetime, message);
+        
+        // Detect first sender
+        if (!firstSender) {
+          firstSender = sender.trim().toLowerCase();
+        }
+
+        const messageBubble = createMessageBubble(sender, datetime, message, firstSender);
         fragment.appendChild(messageBubble);
       }
     }
   }
 
-  chatContainer.appendChild(fragment); // Append all messages at once
+  chatContainer.appendChild(fragment);
 }
 
-/**
- * Creates a message bubble element
- * @param {string} sender - Name of message sender
- * @param {string} datetime - Timestamp of the message
- * @param {string} message - Content of the message
- * @returns {HTMLElement} - The message bubble element
- */
-function createMessageBubble(sender, datetime, message) {
+// Message bubble creation with swap logic
+function createMessageBubble(sender, datetime, message, firstSender) {
   const messageElement = document.createElement('div');
-  messageElement.classList.add('message', sender.toLowerCase().includes('james') ? 'receiver' : 'sender');
+  const isUser = sender.trim().toLowerCase() === firstSender;
+  
+  // Determine message side with swap logic
+  const messageType = isSwapped ? 
+    (isUser ? 'receiver' : 'sender') : 
+    (isUser ? 'sender' : 'receiver');
+  
+  messageElement.classList.add('message', messageType);
 
   const bubble = document.createElement('div');
   bubble.classList.add('bubble');
 
-  // Replace "sticker omitted", "audio omitted", "image omitted", "gif omitted" and "video omitted" with custom placeholders
+  // Media handling
   if (message.trim() === "image omitted") {
-    bubble.textContent = "📷 [Image]"; // Image placeholder
-    bubble.classList.add('image-bubble'); // Add class for image
+    bubble.textContent = "📷 [Image]";
+    bubble.classList.add('image-bubble');
   } else if (message.trim() === "audio omitted") {
-    bubble.textContent = "► ······||||lllll|||||||lll···|||lll·· 🎤 [Audio]"; // Audio placeholder
-    bubble.classList.add('audio-bubble'); // Add class for audio
+    bubble.textContent = "► ······||||lllll|||||||lll···|||lll·· 🎤 [Audio]";
+    bubble.classList.add('audio-bubble');
   } else if (message.trim() === "sticker omitted") {
-    bubble.textContent = "✧(•̀ω•́)✧ [Sticker]"; // Sticker placeholder
-    bubble.classList.add('sticker-bubble'); // Add class for sticker
+    bubble.textContent = "✧(•̀ω•́)✧ [Sticker]";
+    bubble.classList.add('sticker-bubble');
   } else if (message.trim() === "GIF omitted") {
-    bubble.textContent = "👾 [GIF]"; // gif placeholder
-    bubble.classList.add('gif-bubble'); // Add class for gif
+    bubble.textContent = "👾 [GIF]";
+    bubble.classList.add('gif-bubble');
   } else if (message.trim() === "video omitted") {
-    bubble.textContent = "🎞️ [video]"; // video placeholder
-    bubble.classList.add('video-bubble'); // Add class for video
+    bubble.textContent = "🎞️ [video]";
+    bubble.classList.add('video-bubble');
   } else {
-    // Add line breaks for long messages
-    const formattedMessage = insertLineBreaks(message.trim(), 100); // 100 characters per line
-    bubble.textContent = formattedMessage; // Regular message with line breaks
+    const formattedMessage = insertLineBreaks(message.trim(), 100);
+    bubble.textContent = formattedMessage;
   }
 
+  // Timestamp
   const timestamp = document.createElement('div');
   timestamp.classList.add('timestamp');
   timestamp.textContent = `${sender} • ${datetime}`;
@@ -95,48 +114,33 @@ function createMessageBubble(sender, datetime, message) {
   return messageElement;
 }
 
-/**
- * Inserts line breaks into a long string after a specified number of characters
- * @param {string} text - The input text
- * @param {number} maxChars - Maximum characters per line
- * @returns {string} - The formatted text with line breaks
- */
+// Line break formatter
 function insertLineBreaks(text, maxChars) {
   let result = '';
   let currentLength = 0;
-
-  // Split the text into words
   const words = text.split(' ');
 
   for (const word of words) {
-    // If the word itself is longer than maxChars, split it
     if (word.length > maxChars) {
       for (let i = 0; i < word.length; i += maxChars) {
         const chunk = word.slice(i, i + maxChars);
         result += chunk + '\n';
-        currentLength = 0; // Reset length after a line break
+        currentLength = 0;
       }
     } else {
-      // If adding the next word exceeds the maxChars limit, add a line break
       if (currentLength + word.length > maxChars) {
         result += '\n';
         currentLength = 0;
       }
-
-      // Add the word to the result
       result += word + ' ';
-      currentLength += word.length + 1; // +1 for the space
+      currentLength += word.length + 1;
     }
   }
 
-  return result.trim(); // Remove the trailing space
+  return result.trim();
 }
 
-/**
- * Creates a system message element
- * @param {string} message - Content of the system message
- * @returns {HTMLElement} - The system message element
- */
+// System message creator
 function createSystemMessage(message) {
   const systemMessageElement = document.createElement('div');
   systemMessageElement.classList.add('message', 'system-message');
@@ -153,14 +157,14 @@ function createSystemMessage(message) {
 const themeToggle = document.getElementById('theme-toggle');
 const body = document.body;
 
-// Check for saved theme in localStorage
+// Load saved theme
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme === 'dark') {
   body.setAttribute('data-theme', 'dark');
-  themeToggle.checked = true; // Set the toggle to the "on" position
+  themeToggle.checked = true;
 }
 
-// Toggle theme on switch click
+// Theme change handler
 themeToggle.addEventListener('change', () => {
   const newTheme = themeToggle.checked ? 'dark' : 'light';
   body.setAttribute('data-theme', newTheme);

@@ -1,9 +1,12 @@
 :root {
     /* Light theme */
-    --header-bg: #128C7E;
-    --header-text: white;
+    --header-bg: #fff;
+    --header-text: #1DAA61;
     --file-input-bg: #ffffff;
-    --file-input-hover: #128C7E;
+    --file-input-hover: #bbffae;
+    --file-input-button-bg: #D9FDD3;
+    --file-input-button-border: #AECAA9;
+    --file-input-button-font: #15603E;
     --chat-bg: #f1f9ff;
     --chat-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     --bubble-sent-bg: #DCF8C6;
@@ -37,36 +40,39 @@
   
   [data-theme="dark"] {
     /* Dark theme */
-    --header-bg: #075E54;
+    --header-bg: #161717;
     --header-text: #ffffff;
-    --file-input-bg: #1F2C34;
-    --file-input-hover: #128C7E;
-    --chat-bg: #1F2C34;
+    --file-input-bg: #161717;
+    --file-input-hover: #205343;
+    --file-input-button-bg: #103529;
+    --file-input-button-border: #284A3F;
+    --file-input-button-font: #D9FDD3;
+    --chat-bg: #161717;
     --chat-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    --bubble-sent-bg: #056162;
-    --bubble-received-bg: #2A3942;
-    --bubble-border: #2A3942;
+    --bubble-sent-bg: #144D37;
+    --bubble-received-bg: #242626;
+    --bubble-border: #161717;
     --system-bubble-bg: #2A3942;
     --system-bubble-text: #ffffff;
-    --timestamp-text: #8696A0;
+    --timestamp-text: #A1B8AF;
     --scrollbar-thumb: #555;
     --scrollbar-thumb-hover: #777;
-    --body-bg: #0B141A;
+    --body-bg: #1D1F1F;
     --text-color: #E1E9EC;
-    --image-bubble-bg: #1F2C34;
+    --image-bubble-bg: #1D1E1E;
     --image-bubble-border: #9bd2ff;
     --image-text-color: #9bd2ff;
-    --audio-bubble-bg: #1F2C34;
+    --audio-bubble-bg: #1D1E1E;
     --audio-bubble-border: #f3adff;
     --audio-text-color: #f3adff;
-    --sticker-bubble-bg: #1F2C34;
+    --sticker-bubble-bg: #1D1E1E;
     --sticker-bubble-border: #ffd493;
     --sticker-text-color: #ffd493;
 
-    --gif-bubble-bg: #1F2C34;
+    --gif-bubble-bg: #1D1E1E;
     --gif-bubble-border: #ff8989;
     --gif-text-color: #ff8989;
-    --video-bubble-bg: #1F2C34;
+    --video-bubble-bg: #1D1E1E;
     --video-bubble-border: #80ff9c;
     --video-text-color: #80ff9c;
   }
@@ -97,12 +103,12 @@
     display: flex;
     align-items: center; /* Center items vertically */
     justify-content: space-between; /* Space out the title and button */
-    height: 60px; /* Adjust height if needed */
+    height: 50px; /* Adjust height if needed */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   .header h1 {
-    font-size: 22px;
+    font-size: 25px;
     margin: 0;
     font-weight: 500;
   }
@@ -187,7 +193,7 @@
     padding: 10px;
     text-align: center;
     position: fixed;
-    top: 60px;
+    top: 42px;
     left: 0;
     right: 0;
     z-index: 1;
@@ -200,11 +206,12 @@
   }
   
   .file-input-label {
-    background-color: #25D366;
-    color: var(--header-text);
+    background-color: var(--file-input-button-bg);
+    color: var(--file-input-button-font);
     padding: 10px 20px;
     border-radius: 25px;
     cursor: pointer;
+    border: 1px solid var(--file-input-button-border);
     font-size: 14px;
     display: inline-block;
     transition: background-color 0.3s ease;
@@ -408,3 +415,51 @@
     transition: all 0.2s ease;
   }
 
+
+  .swap-button {
+    background-color: var(--header-bg);
+    color: var(--file-input-button-font);
+    border-radius: 25px;
+    cursor: pointer;
+    border: 1px solid var(--timestamp-text);
+    font-size: 13px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    width: 115px; /* Width of the toggle */
+    height: 30px; /* Height of the toggle */
+  }
+  
+  .swap-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+/* Add to style.css */
+.loading-spinner {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #25D366;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 1000;
+}
+
+[data-theme="dark"] .loading-spinner {
+  border-top-color: #128C7E;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Add blur effect during loading */
+.loading-active #chat-container {
+  filter: blur(2px);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
