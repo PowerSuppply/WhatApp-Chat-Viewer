@@ -26,6 +26,13 @@
     --sticker-bubble-border: #ffcc80;
     --sticker-text-color: #111b21;
 
+    --gif-bubble-bg: #ffcdcd;
+    --gif-bubble-border: #ff8989;
+    --gif-text-color: #111b21;
+
+    --video-bubble-bg: #e0ffe2;
+    --video-bubble-border: #80ff9c;
+    --video-text-color: #111b21;
   }
   
   [data-theme="dark"] {
@@ -55,6 +62,13 @@
     --sticker-bubble-bg: #1F2C34;
     --sticker-bubble-border: #ffd493;
     --sticker-text-color: #ffd493;
+
+    --gif-bubble-bg: #1F2C34;
+    --gif-bubble-border: #ff8989;
+    --gif-text-color: #ff8989;
+    --video-bubble-bg: #1F2C34;
+    --video-bubble-border: #80ff9c;
+    --video-text-color: #80ff9c;
   }
   
   /* Base styles */
@@ -274,6 +288,21 @@
     color: var(--sticker-text-color) !important;  
 }
   
+.gif-bubble {
+    background-color: var(--gif-bubble-bg) !important;
+    border: 1px solid var(--gif-bubble-border) !important;
+    color: var(--gif-text-color) !important;  
+}
+
+.video-bubble {
+    background-color: var(--video-bubble-bg) !important;
+    border: 1px solid var(--video-bubble-border) !important;
+    color: var(--video-text-color) !important;  
+}
+
+
+
+
   /* System message styles */
   .system-message {
     display: flex;
@@ -371,8 +400,11 @@
   /* Hover effects */
   .image-bubble:hover,
   .audio-bubble:hover,
-  .sticker-bubble:hover {
+  .sticker-bubble:hover,
+  .gif-bubble:hover,
+  .video-bubble:hover {
     opacity: 0.9;
     transform: scale(1.02);
     transition: all 0.2s ease;
   }
+

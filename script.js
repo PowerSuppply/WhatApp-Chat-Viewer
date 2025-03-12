@@ -35,7 +35,7 @@ function displayChat(text) {
     const cleanLine = line.replace(/[\u200e\u200f]/g, '');
 
     if (line.includes('end-to-end encrypted') || line.includes('Messages and calls are end-to-end encrypted')) {
-      const systemMessage = createSystemMessage(cleanLine);
+      const systemMessage = createSystemMessage("Messages are end-to-end encrypted. No one outside of this page, not even WhatsApp, can read or listen to them.");
       fragment.appendChild(systemMessage);
     } else {
       const standardMatch = cleanLine.match(/\[(.*?)\]\s+(.*?):\s*(.*)/);
@@ -64,9 +64,9 @@ function createMessageBubble(sender, datetime, message) {
   const bubble = document.createElement('div');
   bubble.classList.add('bubble');
 
-  // Replace "sticker omitted", "audio omitted", and "image omitted" with custom placeholders
+  // Replace "sticker omitted", "audio omitted", "image omitted", "gif omitted" and "video omitted" with custom placeholders
   if (message.trim() === "image omitted") {
-    bubble.textContent = "🖼️ [Image]"; // Image placeholder
+    bubble.textContent = "📷 [Image]"; // Image placeholder
     bubble.classList.add('image-bubble'); // Add class for image
   } else if (message.trim() === "audio omitted") {
     bubble.textContent = "► ······||||lllll|||||||lll···|||lll·· 🎤 [Audio]"; // Audio placeholder
@@ -74,6 +74,12 @@ function createMessageBubble(sender, datetime, message) {
   } else if (message.trim() === "sticker omitted") {
     bubble.textContent = "✧(•̀ω•́)✧ [Sticker]"; // Sticker placeholder
     bubble.classList.add('sticker-bubble'); // Add class for sticker
+  } else if (message.trim() === "GIF omitted") {
+    bubble.textContent = "👾 [GIF]"; // gif placeholder
+    bubble.classList.add('gif-bubble'); // Add class for gif
+  } else if (message.trim() === "video omitted") {
+    bubble.textContent = "🎞️ [video]"; // video placeholder
+    bubble.classList.add('video-bubble'); // Add class for video
   } else {
     // Add line breaks for long messages
     const formattedMessage = insertLineBreaks(message.trim(), 100); // 100 characters per line
