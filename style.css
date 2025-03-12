@@ -1,0 +1,378 @@
+:root {
+    /* Light theme */
+    --header-bg: #128C7E;
+    --header-text: white;
+    --file-input-bg: #ffffff;
+    --file-input-hover: #128C7E;
+    --chat-bg: #f1f9ff;
+    --chat-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --bubble-sent-bg: #DCF8C6;
+    --bubble-received-bg: #ffffff;
+    --bubble-border: #e0e0e0;
+    --system-bubble-bg: #f0f2f5;
+    --system-bubble-text: #54656f;
+    --timestamp-text: #667781;
+    --scrollbar-thumb: #888;
+    --scrollbar-thumb-hover: #555;
+    --body-bg: #f0f2f5;
+    --text-color: #111b21;
+    --image-bubble-bg: #e3f2fd;
+    --image-bubble-border: #90caf9;
+    --image-text-color: #111b21;
+    --audio-bubble-bg: #f3e5f5;
+    --audio-bubble-border: #ce93d8;
+    --audio-text-color: #111b21;
+    --sticker-bubble-bg: #fff3e0;
+    --sticker-bubble-border: #ffcc80;
+    --sticker-text-color: #111b21;
+
+  }
+  
+  [data-theme="dark"] {
+    /* Dark theme */
+    --header-bg: #075E54;
+    --header-text: #ffffff;
+    --file-input-bg: #1F2C34;
+    --file-input-hover: #128C7E;
+    --chat-bg: #1F2C34;
+    --chat-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --bubble-sent-bg: #056162;
+    --bubble-received-bg: #2A3942;
+    --bubble-border: #2A3942;
+    --system-bubble-bg: #2A3942;
+    --system-bubble-text: #ffffff;
+    --timestamp-text: #8696A0;
+    --scrollbar-thumb: #555;
+    --scrollbar-thumb-hover: #777;
+    --body-bg: #0B141A;
+    --text-color: #E1E9EC;
+    --image-bubble-bg: #1F2C34;
+    --image-bubble-border: #9bd2ff;
+    --image-text-color: #9bd2ff;
+    --audio-bubble-bg: #1F2C34;
+    --audio-bubble-border: #f3adff;
+    --audio-text-color: #f3adff;
+    --sticker-bubble-bg: #1F2C34;
+    --sticker-bubble-border: #ffd493;
+    --sticker-text-color: #ffd493;
+  }
+  
+  /* Base styles */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Header styles */
+  .header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 10px 16px; /* Adjust padding to move elements up or down */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space out the title and button */
+    height: 60px; /* Adjust height if needed */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header h1 {
+    font-size: 22px;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+/* Theme toggle container */
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between toggle and text */
+  }
+  
+  /* Hide the default checkbox */
+  #theme-toggle {
+    display: none;
+  }
+  
+  /* Toggle label (the switch background) */
+  .theme-toggle-label {
+    position: relative;
+    display: inline-block;
+    width: 60px; /* Width of the toggle */
+    height: 30px; /* Height of the toggle */
+    background-color: #d2ecff; /* Bright yellow background for light theme */
+    border-radius: 15px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Slider (the circle that moves) */
+  .theme-toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px; /* Size of the slider */
+    height: 26px; /* Size of the slider */
+    border-radius: 50%; /* Make it circular */
+    transition: transform 0.3s ease;
+  }
+  
+  /* Emoji inside the toggle */
+  .theme-toggle-emoji {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Sun emoji (visible in light theme) */
+  .theme-toggle-emoji.sun {
+    left: 5px; /* Position on the left */
+    opacity: 1; /* Visible by default */
+  }
+  
+  /* Moon emoji (visible in dark theme) */
+  .theme-toggle-emoji.moon {
+    right: 5px; /* Position on the right */
+    opacity: 0; /* Hidden by default */
+  }
+  
+  /* When the toggle is checked (dark theme) */
+  #theme-toggle:checked + .theme-toggle-label {
+    background-color: #1F2C34; /* Dark background for dark theme */
+  }
+  
+  #theme-toggle:checked + .theme-toggle-label .theme-toggle-slider {
+    transform: translateX(30px); /* Move the slider to the right */
+  }
+  
+  /* Hide sun and show moon in dark theme */
+  #theme-toggle:checked + .theme-toggle-label .theme-toggle-emoji.sun {
+    opacity: 0; /* Hide sun */
+  }
+  
+  #theme-toggle:checked + .theme-toggle-label .theme-toggle-emoji.moon {
+    opacity: 1; /* Show moon */
+  }
+  
+  /* File input container */
+  .file-input-container {
+    background-color: var(--file-input-bg);
+    padding: 12px;
+    text-align: center;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    border-bottom: 1px solid var(--bubble-border);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  #file-input {
+    display: none;
+  }
+  
+  .file-input-label {
+    background-color: #25D366;
+    color: var(--header-text);
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-input-label:hover {
+    background-color: var(--file-input-hover);
+  }
+  
+  /* Chat container */
+  #chat-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 120px auto 0;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    background-color: var(--chat-bg);
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: var(--chat-shadow);
+  }
+  
+  /* Message styles */
+  .message {
+    margin: 7px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .receiver {
+    align-items: flex-end;
+  }
+  
+  .sender {
+    align-items: flex-start;
+  }
+  
+  .bubble {
+    padding: 6px 10px;
+    border-radius: 15px;
+    max-width: 70%;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  
+  /* Message types */
+  .receiver .bubble {
+    background-color: var(--bubble-sent-bg);
+    border-bottom-right-radius: 5px;
+  }
+  
+  .sender .bubble {
+    background-color: var(--bubble-received-bg);
+    border-bottom-left-radius: 5px;
+    border: 1px solid var(--bubble-border);
+  }
+  
+  /* Image, Audio, Sticker bubbles */
+  .image-bubble {
+    background-color: var(--image-bubble-bg) !important;
+    border: 1px solid var(--image-bubble-border) !important;
+    color: var(--image-text-color) !important;
+}
+  
+  .audio-bubble {
+    background-color: var(--audio-bubble-bg) !important;
+    border: 1px solid var(--audio-bubble-border) !important;
+    color: var(--audio-text-color) !important;  
+}
+  
+  .sticker-bubble {
+    background-color: var(--sticker-bubble-bg) !important;
+    border: 1px solid var(--sticker-bubble-border) !important;
+    color: var(--sticker-text-color) !important;  
+}
+  
+  /* System message styles */
+  .system-message {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    width: 100%;
+  }
+  
+  .system-message .bubble {
+    background-color: var(--system-bubble-bg);
+    padding: 8px 15px;
+    font-size: 12px;
+    color: var(--system-bubble-text);
+    border-radius: 20px;
+    max-width: 80%;
+    text-align: center;
+    box-shadow: none;
+    margin: 0 auto;
+  }
+  
+  /* Timestamp */
+  .timestamp {
+    font-size: 11px;
+    color: var(--timestamp-text);
+    margin-top: 0px;
+    line-height: 14px;
+  }
+  
+  .receiver .timestamp {
+    text-align: right;
+  }
+  
+  .sender .timestamp {
+    text-align: left;
+  }
+  
+  /* Scrollbar styles */
+  #chat-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  #chat-container::-webkit-scrollbar-track {
+    background: var(--body-bg);
+    border-radius: 4px;
+  }
+  
+  #chat-container::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+  }
+  
+  #chat-container::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+  
+  /* Media indicators */
+  .media-indicator {
+    font-size: 12px;
+    color: var(--timestamp-text);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .media-indicator img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    #chat-container {
+      padding: 15px;
+      margin-top: 100px;
+    }
+  
+    .header {
+      height: 50px;
+    }
+  
+    .header h1 {
+      font-size: 16px;
+    }
+  
+    .file-input-container {
+      top: 50px;
+    }
+  
+    .bubble {
+      max-width: 80%;
+    }
+  }
+  
+  /* Hover effects */
+  .image-bubble:hover,
+  .audio-bubble:hover,
+  .sticker-bubble:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+  }
